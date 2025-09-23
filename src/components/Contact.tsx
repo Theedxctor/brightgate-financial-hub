@@ -170,7 +170,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-medium text-foreground">Email</p>
-                    <p className="text-muted-foreground">admin@brightgate.co.ke</p>
+                    <p className="text-muted-foreground">info@brightgate.co.ke</p>
                   </div>
                 </div>
                 
