@@ -48,7 +48,7 @@ const Hero = () => {
               size="lg"
               variant="outline"
               onClick={() => scrollToSection('services')}
-              className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-all duration-300"
+              className="border-secondary text-secondary hover:bg-secondary hover:text-secondary-foreground transition-all duration-300"
             >
               View Our Services
             </Button>
