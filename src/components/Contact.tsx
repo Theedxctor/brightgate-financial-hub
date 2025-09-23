@@ -3,13 +3,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Phone, MapPin, Send, MessageCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Send, MessageCircle, ChevronDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+const services = [
+  { id: 'accounting', label: 'Accounting Services' },
+  { id: 'bookkeeping', label: 'Bookkeeping' },
+  { id: 'tax', label: 'Tax Services' },
+  { id: 'consultancy', label: 'Business Consultancy' },
+  { id: 'remote', label: 'Remote Assistance' },
+  { id: 'software', label: 'Software Solutions' },
+  { id: 'other', label: 'Other (Please specify)' }
+];
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    service: "",
     message: ""
   });
   const { toast } = useToast();
@@ -18,7 +29,7 @@ const Contact = () => {
     e.preventDefault();
     
     // Basic validation
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name || !formData.email || !formData.service || !formData.message) {
       toast({
         title: "Please fill in all fields",
         description: "All fields are required to submit your message.",
@@ -37,11 +48,12 @@ const Contact = () => {
     setFormData({
       name: "",
       email: "",
+      service: "",
       message: ""
     });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
@@ -49,7 +61,7 @@ const Contact = () => {
   };
 
   const openWhatsApp = () => {
-    const phoneNumber = "254700000000"; // Replace with actual number
+    const phoneNumber = "254740797240";
     const message = encodeURIComponent("Hello! I'm interested in your accounting services. Could you provide more information?");
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
   };
@@ -84,7 +96,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-medium text-foreground">Email</p>
-                    <p className="text-muted-foreground">info@brightgate.co.ke</p>
+                    <p className="text-muted-foreground">admin@brightgate.co.ke</p>
                   </div>
                 </div>
                 
@@ -94,7 +106,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-medium text-foreground">Phone</p>
-                    <p className="text-muted-foreground">+254 700 000 000</p>
+                    <p className="text-muted-foreground">+254 740 797 240</p>
                   </div>
                 </div>
                 
@@ -161,6 +173,32 @@ const Contact = () => {
                       placeholder="Enter your email address"
                       className="w-full"
                     />
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="service" className="block text-sm font-medium text-foreground mb-2">
+                      Service Interested In *
+                    </label>
+                    <div className="relative">
+                      <select
+                        id="service"
+                        name="service"
+                        value={formData.service}
+                        onChange={handleChange}
+                        className="w-full pl-3 pr-10 py-2 text-foreground bg-background border border-input rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm appearance-none"
+                        required
+                      >
+                        <option value="" disabled>Select a service</option>
+                        {services.map((service) => (
+                          <option key={service.id} value={service.id}>
+                            {service.label}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-foreground">
+                        <ChevronDown className="h-4 w-4" />
+                      </div>
+                    </div>
                   </div>
                   
                   <div>
