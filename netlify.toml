@@ -1,23 +1,15 @@
+# Minimal Netlify configuration for Vite project
 [build]
-  command = "./build.sh"
+  command = "npm install && npm run build"
   publish = "dist"
-  functions = "netlify/functions"
 
 [build.environment]
-  NODE_VERSION = "18.17.0"
-  NPM_VERSION = "9.6.7"
-  NPM_FLAGS = "--prefix=./"
+  NODE_VERSION = "18"
+  NPM_VERSION = "10"
   NODE_ENV = "production"
 
 [dev]
+  command = "npm run dev"
+  port = 5173
   framework = "vite"
   target = "src"
-  port = 8080
-  command = "npm run dev"
-
-[context.production]
-  command = "npm run build"
-
-# Disable Next.js plugin as this is a Vite project
-# [[plugins]]
-#   package = "@netlify/plugin-nextjs"
