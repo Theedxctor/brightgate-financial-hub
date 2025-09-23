@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Phone, MapPin, Send, MessageCircle, ChevronDown } from "lucide-react";
+import { Mail, Phone, MapPin, Send, MessageCircle, ChevronDown, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import emailjs from '@emailjs/browser';
 
 const services = [
   { id: 'accounting', label: 'Accounting Services' },
@@ -17,6 +18,7 @@ const services = [
 ];
 
 const Contact = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,7 +27,7 @@ const Contact = () => {
   });
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -38,19 +40,91 @@ const Contact = () => {
       return;
     }
 
-    // Simulate form submission
-    toast({
-      title: "Message sent successfully!",
-      description: "We'll get back to you within 24 hours.",
-    });
-    
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      service: "",
-      message: ""
-    });
+    setIsSubmitting(true);
+
+    try {
+      // Load EmailJS configuration from environment variables
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+      // Validate environment variables
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error('EmailJS configuration is incomplete. Please check your environment variables.');
+      }
+
+      // Get the selected service label
+      const selectedService = services.find(s => s.id === formData.service)?.label || formData.service;
+
+      // Log the environment variables for debugging (remove in production)
+      console.log('EmailJS Config:', {
+        serviceId,
+        templateId,
+        publicKey: publicKey ? '***' + publicKey.slice(-4) : 'Not set',
+        hasTemplateId: !!templateId,
+        hasServiceId: !!serviceId,
+        hasPublicKey: !!publicKey
+      });
+
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          title: `New Contact Form Submission - ${selectedService}`,
+          name: formData.name,
+          email: formData.email,
+          time: new Date().toLocaleString(),
+          message: `Service: ${selectedService}\n\nMessage:\n${formData.message}`,
+          reply_to: formData.email
+        },
+        publicKey
+      );
+
+      console.log('EmailJS Response:', response);
+
+      // Show success message
+      toast({
+        title: "Message sent successfully!",
+        description: "We'll get back to you within 24 hours.",
+      });
+      
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        service: "",
+        message: ""
+      });
+    } catch (error) {
+      console.error("Error sending email:", error);
+      
+      let errorMessage = "There was an error sending your message. Please try again later.";
+      
+      if (error instanceof Error) {
+        console.error("Error details:", {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        });
+        
+        if (error.message.includes("Invalid template ID")) {
+          errorMessage = "Invalid email template configuration. Please contact support.";
+        } else if (error.message.includes("Invalid user ID")) {
+          errorMessage = "Invalid email service configuration. Please contact support.";
+        } else if (error.message.includes("Network Error")) {
+          errorMessage = "Network error. Please check your internet connection and try again.";
+        }
+      }
+      
+      toast({
+        title: "Error sending message",
+        description: errorMessage,
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -219,9 +293,19 @@ const Contact = () => {
                   <Button 
                     type="submit" 
                     className="w-full bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity"
+                    disabled={isSubmitting}
                   >
-                    <Send className="mr-2 h-5 w-5" />
-                    Send Message
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="mr-2 h-5 w-5" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 </form>
               </CardContent>
