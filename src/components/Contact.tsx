@@ -44,9 +44,9 @@ const Contact = () => {
 
     try {
       // Load EmailJS configuration from environment variables
-      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+      const serviceId = 'service_dh6hj56';
+      const templateId = 'template_qv5hb9b';
+      const publicKey = 'EukkOAeOWrJBSvGlg';
       
       // Validate environment variables
       if (!serviceId || !templateId || !publicKey) {
