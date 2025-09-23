@@ -2,41 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+/* Brightgate Consultants Design System
+Professional, trustworthy, and modern color palette for accounting services
 All colors MUST be HSL.
 */
 
 @layer base {
   :root {
+    /* Core Brand Colors */
+    --primary: 221 83% 25%;          /* Deep Professional Blue */
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 221 83% 35%;    /* Lighter blue for hover states */
+    
+    --secondary: 262 83% 58%;        /* Professional Purple */
+    --secondary-foreground: 0 0% 100%;
+    --secondary-light: 262 83% 68%;  /* Lighter purple for hover */
+    
+    --accent: 217 19% 85%;           /* Soft Blue Gray */
+    --accent-foreground: 221 39% 11%;
+    
+    /* Background System */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    --background-subtle: 220 14% 96%; /* Very light blue-gray */
+    --foreground: 221 39% 11%;       /* Dark blue-gray text */
+    
+    /* Card System */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 221 39% 11%;
+    --card-hover: 220 14% 98%;       /* Subtle hover state */
+    
+    /* Interactive Elements */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --popover-foreground: 221 39% 11%;
+    
+    /* Text Hierarchy */
+    --muted: 217 19% 78%;            /* Muted backgrounds */
+    --muted-foreground: 221 13% 44%; /* Muted text */
+    --text-subtle: 221 13% 64%;      /* Subtle text */
+    
+    /* Trust & Success */
+    --success: 142 71% 45%;          /* Professional green */
+    --success-foreground: 0 0% 100%;
+    
+    /* Alert States */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    
+    /* Borders & Inputs */
+    --border: 217 19% 85%;
+    --input: 217 19% 85%;
+    --ring: 221 83% 25%;             /* Focus ring matches primary */
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(221 83% 25%), hsl(262 83% 58%));
+    --gradient-subtle: linear-gradient(135deg, hsl(220 14% 96%), hsl(0 0% 100%));
+    --gradient-hero: linear-gradient(135deg, hsl(221 83% 25%) 0%, hsl(262 83% 58%) 100%);
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(221 83% 25% / 0.05);
+    --shadow-md: 0 4px 6px -1px hsl(221 83% 25% / 0.1), 0 2px 4px -2px hsl(221 83% 25% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(221 83% 25% / 0.1), 0 4px 6px -4px hsl(221 83% 25% / 0.1);
+    --shadow-card: 0 4px 12px -2px hsl(221 83% 25% / 0.08);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +134,24 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary;
   }
 }
