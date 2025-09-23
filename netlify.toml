@@ -1,16 +1,14 @@
 [build]
-  command = "npm install --production=false && npm run build"
+  command = "npm install --omit=dev && npm run build"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "18"
   NPM_VERSION = "10"
   NODE_ENV = "production"
-  NPM_FLAGS = "--production=false"
 
 [dev]
   command = "npm run dev"
   port = 5173
   framework = "vite"
   target = "src"
-  publish = "dist"
