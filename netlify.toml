@@ -1,9 +1,11 @@
 [build]
-  command = "npm run build"
+  command = "npm install && npm run build"
   publish = "dist"
+  functions = ".netlify/functions/"
 
 [build.environment]
   NODE_VERSION = "18"
+  NPM_FLAGS = "--prefix=./"
 
 # Environment variables will be injected by Netlify's UI
 # and won't be exposed in the built files
@@ -11,9 +13,11 @@
 [dev]
   framework = "vite"
   target = "src"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+  port = 8080
 
 [context.production.environment]
   NODE_ENV = "production"
+
+# Disable Next.js plugin as this is a Vite project
+# [[plugins]]
+#   package = "@netlify/plugin-nextjs"
