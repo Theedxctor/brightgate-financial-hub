@@ -43,14 +43,22 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Load EmailJS configuration from environment variables
+      // EmailJS configuration
+      const isGmail = formData.email.endsWith('@gmail.com');
+      
+      // Use a different service for Gmail if needed
       const serviceId = 'service_5k6y26t';
       const templateId = 'template_qv5hb9b';
       const publicKey = 'EukkOAeOWrJBSvGlg';
       
-      // Validate environment variables
+      // Validate configuration
       if (!serviceId || !templateId || !publicKey) {
-        throw new Error('EmailJS configuration is missing. Please check your environment variables.');
+        console.error('EmailJS configuration error: Missing required configuration');
+        throw new Error('EmailJS configuration is missing. Please check your EmailJS setup.');
+      }
+      
+      if (isGmail) {
+        console.warn('Sending to Gmail address - ensure your EmailJS service allows this');
       }
 
       // Get the selected service label
@@ -66,22 +74,72 @@ const Contact = () => {
         hasPublicKey: !!publicKey
       });
 
+      // Format the current date and time
+      const formattedDate = new Date().toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+
+      // Create a well-formatted email message
+      const emailContent = `
+        ======================
+        NEW CONTACT FORM SUBMISSION
+        ======================
+        
+        Date: ${formattedDate}
+        From: ${formData.name}
+        Email: ${formData.email}
+        Service: ${selectedService}
+        
+        MESSAGE:
+        ${formData.message}
+        
+        ======================
+        This is an automated message from your website's contact form.
+        ======================
+      `;
+
+      const templateParams = {
+        name: formData.name,
+        service: selectedService,
+        message: emailContent,
+        time: formattedDate,
+        to_email: 'your-personal-email@example.com'  // CHANGE THIS to your working email
+      };
+
+      console.log('Sending email with params:', templateParams);
+
       // Send email using EmailJS
       const response = await emailjs.send(
         serviceId,
         templateId,
-        {
-          title: `New Contact Form Submission - ${selectedService}`,
-          name: formData.name,
-          email: formData.email,
-          time: new Date().toLocaleString(),
-          message: `Service: ${selectedService}\n\nMessage:\n${formData.message}`,
-          reply_to: formData.email
-        },
+        templateParams,
         publicKey
-      );
-
-      console.log('EmailJS Response:', response);
+      ).catch(error => {
+        console.error('EmailJS send error:', {
+          error,
+          status: error.status,
+          text: error.text,
+          response: error.response
+        });
+        throw error;
+      });
+      
+      console.log('Email sent successfully:', {
+        to: templateParams.to_email,
+        from: formData.email,
+        service: templateParams.service,
+        time: templateParams.time
+      });
+      
+      // For debugging - only log a preview of the message in console
+      console.log('Message preview (first 100 chars):', {
+        preview: templateParams.message.substring(0, 100).replace(/\n/g, ' ').trim() + '...'
+      });
 
       // Show success message
       toast({
