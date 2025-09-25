@@ -44,7 +44,7 @@ const Contact = () => {
 
     try {
       // Load EmailJS configuration from environment variables
-      const serviceId = 'service_dh6hj56';
+      const serviceId = 'service_5k6y26t';
       const templateId = 'template_qv5hb9b';
       const publicKey = 'EukkOAeOWrJBSvGlg';
       
