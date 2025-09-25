@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,12 +33,19 @@ const Header = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center">
+          <div className="flex items-center space-x-2">
             <button 
               onClick={() => scrollToSection('hero')}
-              className="text-xl font-bold text-primary hover:text-primary-light transition-colors"
+              className="flex items-center space-x-2"
             >
-              Brightgate Consultants
+              <img 
+                src="/icon.jpeg" 
+                alt="Brightgate Consultants Logo" 
+                className="h-10 w-10 rounded-full object-cover"
+              />
+              <span className="text-xl font-bold text-primary hover:text-primary-light transition-colors hidden sm:inline">
+                Brightgate Consultants
+              </span>
             </button>
           </div>
 
