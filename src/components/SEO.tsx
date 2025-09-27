@@ -41,6 +41,40 @@ const CORE_KEYWORDS = [
   'accounting software Kenya'
 ];
 
+const defaultStructuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'AccountingService',
+  name: 'Brightgate Consultants',
+  description: 'Professional accounting and tax services in Nairobi, Kenya',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Nairobi, Thika',
+    addressLocality: 'Nairobi',
+    postalCode: '00100',
+    addressCountry: 'KE'
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: '-1.2921',
+    longitude: '36.8219'
+  },
+  telephone: '+254700000000',
+  email: 'info@brightgate.co.ke',
+  url: 'https://brightgate.co.ke',
+  priceRange: '$$',
+  openingHoursSpecification: [{
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '08:00',
+    closes: '17:00'
+  }],
+  sameAs: [
+    'https://www.linkedin.com/company/brightgate-consultants',
+    'https://twitter.com/brightgate_ke',
+    'https://www.facebook.com/brightgate.consultants'
+  ]
+};
+
 export function SEO({
   title = 'Brightgate Consultants | Trusted Online Accountants in Kenya',
   description = 'Professional online accounting services in Kenya. Expert bookkeeping, tax services, business consultancy, and accounting software solutions for businesses in Nairobi and across Kenya.',
@@ -49,7 +83,7 @@ export function SEO({
   ogType = 'website',
   ogImage = 'https://brightgate.co.ke/og-image.jpg',
   twitterCard = 'summary_large_image',
-  structuredData,
+  structuredData = defaultStructuredData,
   location = 'Nairobi, Kenya',
   serviceType = 'Accounting Services'
 }: SEOProps) {
@@ -118,14 +152,9 @@ export function SEO({
       <link rel="manifest" href="/site.webmanifest" />
 
       {/* Structured Data */}
-      {structuredData && (
-        <script type="application/ld+json">
-          {JSON.stringify({
-            '@context': 'https://schema.org',
-            ...structuredData,
-          })}
-        </script>
-      )}
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
     </Helmet>
   );
 }
